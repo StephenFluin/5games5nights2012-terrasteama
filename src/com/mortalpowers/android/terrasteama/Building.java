@@ -5,6 +5,9 @@ public abstract class Building {
 	private int requiredSteam = 0;
 	private int currentSteam = 0;
 	private int steamConsumption = 0;
+	protected int builderQuantity = 0;
+	protected int steamProduction = 0;
+	protected int level = 1;
 	private String name = "Unnamed";
 
 	public Building(int consumption, String name) {
@@ -13,7 +16,7 @@ public abstract class Building {
 	}
 	
 	public int getSteamProduction() {
-		return 0;
+		return steamProduction;
 	}
 
 	public int getSteamConsumption() {
@@ -21,7 +24,7 @@ public abstract class Building {
 	}
 
 	public int getBuilderQuantity() {
-		return 0;
+		return builderQuantity;
 	}
 	public int getRequiredSteam () {
 		return requiredSteam;
@@ -42,5 +45,14 @@ public abstract class Building {
 	
 	public String getName() {
 		return name;
+	}
+	public void upgrade() {
+		this.level +=1;
+		steamConsumption = (int) Math.round(steamConsumption * 1.5);
+		builderQuantity = Math.round(builderQuantity * 2);
+		steamProduction = Math.round(steamProduction * 2);
+		requiredSteam = (int) Math.round(requiredSteam * 1.5);
+		
+		
 	}
 }
