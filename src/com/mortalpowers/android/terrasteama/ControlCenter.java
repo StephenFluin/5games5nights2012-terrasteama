@@ -6,5 +6,9 @@ public class ControlCenter extends Building {
 		super(5);
 		// 
 	}
+	
+	public int getBuilderQuantity() {
+		return 1;
+	}
 
 }

@@ -23,5 +23,23 @@ public class Game {
 		buildings.add(b);
 		b.setCompletion(b.getRequiredSteam());
 	}
+	public int getOngoingBuilds() {
+		int ongoingBuilds = 0;
+		for(Building b: buildings) {
+			if(b.isComplete()) {
+				ongoingBuilds++;
+			}
+		}
+		return ongoingBuilds;
+	}
+	public int getAvailableBuilds() {
+		int maxBuilds = 0;
+		for(Building b: buildings) {
+			maxBuilds += b.getBuilderQuantity();
+		}
+		return maxBuilds - getOngoingBuilds();
+			
+		
+	}
 	
 }

@@ -24,6 +24,9 @@ public abstract class Building {
 	public int getRequiredSteam () {
 		return requiredSteam;
 	}
+	public boolean isComplete() {
+		return (currentSteam >= requiredSteam);
+	}
 	
 	public void setCompletion(int steam) {
 		currentSteam = steam;
