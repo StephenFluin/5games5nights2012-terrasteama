@@ -4,13 +4,18 @@ public abstract class Building {
 	
 	private int requiredSteam = 0;
 	private int currentSteam = 0;
+	private int steamConsumption = 0;
 
+	public Building(int consumption) {
+		steamConsumption = consumption;
+	}
+	
 	public int getSteamProduction() {
 		return 0;
 	}
 
 	public int getSteamConsumption() {
-		return 0;
+		return steamConsumption;
 	}
 
 	public int getBuilderQuantity() {

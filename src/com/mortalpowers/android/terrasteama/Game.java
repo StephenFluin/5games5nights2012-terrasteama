@@ -3,13 +3,14 @@ package com.mortalpowers.android.terrasteama;
 import java.util.Vector;
 
 public class Game {
-	public static Game game;
+	public static Game game = new Game();
 	public Vector<Building> buildings = new Vector<Building>();
 	
 	
 	public Game() {
 		game = this;
-		
+		addFinishedBuilding(new Well());
+		addFinishedBuilding(new ControlCenter());
 		
 		
 	}
