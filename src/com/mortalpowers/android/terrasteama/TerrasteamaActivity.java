@@ -1,24 +1,19 @@
 package com.mortalpowers.android.terrasteama;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class TerrasteamaActivity extends Activity {
 	private BuildingAdapter adapter;
@@ -85,14 +80,15 @@ public class TerrasteamaActivity extends Activity {
 			System.out.println("Clicked");
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					TerrasteamaActivity.this);
-			Building name = adapter.getItem(position);
-			builder.setMessage("Would you like to upgrade " + name + "?")
+			Building b = adapter.getItem(position);
+			builder.setMessage("Would you like to upgrade " + b.getName() + "?")
 					.setCancelable(false)
 					.setPositiveButton("Upgrade",
-							new DialogInterface.OnClickListener() {
+							new BuildingClickListener(b) {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									TerrasteamaActivity.this.finish();
+									getBuilding().upgrade();
+									dialog.cancel();
 								}
 							})
 					.setNegativeButton("Not Yet",
@@ -105,5 +101,20 @@ public class TerrasteamaActivity extends Activity {
 			AlertDialog alert = builder.create();
 			alert.show();
 		}
+	}
+	
+	public abstract class BuildingClickListener implements DialogInterface.OnClickListener {
+		Building building;
+		
+		public BuildingClickListener(Building b) {
+			building = b;
+		}
+		
+		public Building getBuilding() {
+			return building;
+		}
+
+		@Override
+		public abstract void onClick(DialogInterface dialog, int which);
 	}
 }
