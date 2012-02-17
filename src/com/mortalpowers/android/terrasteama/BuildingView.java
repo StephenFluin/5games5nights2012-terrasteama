@@ -5,14 +5,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class BuildingView extends LinearLayout {
-Building building;
-	public BuildingView(Context context,Building b) {
+	Building building;
+	Context context;
+	TextView name;
+
+	public BuildingView(Context context, Building b) {
 		super(context);
-		building = b;
-		TextView name = new TextView(context);
-		name.setText(b.getName());
+		name = new TextView(context);
 		this.addView(name);
+		setBuilding(b);
 	}
 	
-
+	public void setBuilding(Building b) {
+		building = b;
+		name.setText(b.getName());
+	}
 }

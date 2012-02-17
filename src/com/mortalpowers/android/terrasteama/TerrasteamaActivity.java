@@ -10,30 +10,68 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class TerrasteamaActivity extends ListActivity {
-	private ArrayAdapter<String> adapter;
+	private BuildingAdapter adapter;
 	
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<String> items = new ArrayList<String>();
-        Vector<Building> building = Game.game.buildings;
-        for (Building b : building) {
-        	items.add(b.getName());
-        }
-        adapter = new ArrayAdapter<String>(this, R.layout.list_item, items);
-        setListAdapter(adapter);
         ListView lv = getListView();
+        
+        Button build = new Button(this);
+        build.setText("New Building");
+        lv.addHeaderView(build, null, false);
+        
+        adapter = new BuildingAdapter(Game.game.buildings);
+        setListAdapter(adapter);
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new UpgradeBuilding());
+    }
+    
+    private class BuildingAdapter extends BaseAdapter {
+    	private Vector<Building> buildings;
+    	
+    	public BuildingAdapter(Vector<Building> b) {
+    		buildings = b;
+    	}
+
+		@Override
+		public int getCount() {
+			return buildings.size();
+		}
+
+		@Override
+		public Building getItem(int position) {
+			return buildings.get(position - 1);
+		}
+		
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView != null && convertView instanceof BuildingView) {
+				((BuildingView)convertView).setBuilding(buildings.get(position));
+				return convertView;
+			} else {
+				return new BuildingView(TerrasteamaActivity.this, buildings.get(position));
+			}
+		}
+    	
     }
     
 	private class UpgradeBuilding implements OnItemClickListener {
@@ -42,7 +80,7 @@ public class TerrasteamaActivity extends ListActivity {
 			System.out.println("Clicked");
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					TerrasteamaActivity.this);
-			String name = adapter.getItem(position);
+			Building name = adapter.getItem(position);
 			builder.setMessage("Would you like to upgrade " + name + "?")
 					.setCancelable(false)
 					.setPositiveButton("Upgrade",
