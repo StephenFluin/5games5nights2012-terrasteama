@@ -16,10 +16,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class TerrasteamaActivity extends ListActivity {
+public class TerrasteamaActivity extends Activity {
 	private BuildingAdapter adapter;
 	
 	
@@ -27,16 +28,20 @@ public class TerrasteamaActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ListView lv = getListView();
+        LinearLayout l = new LinearLayout(this);
+        l.setOrientation(LinearLayout.VERTICAL);
+        setContentView(l);
+        ListView lv = new ListView(this);
         
         Button build = new Button(this);
         build.setText("New Building");
-        lv.addHeaderView(build, null, false);
+        l.addView(build);
         
         adapter = new BuildingAdapter(Game.game.buildings);
-        setListAdapter(adapter);
+        lv.setAdapter(adapter);
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new UpgradeBuilding());
+        l.addView(lv);
     }
     
     private class BuildingAdapter extends BaseAdapter {
@@ -53,7 +58,7 @@ public class TerrasteamaActivity extends ListActivity {
 
 		@Override
 		public Building getItem(int position) {
-			return buildings.get(position - 1);
+			return buildings.get(position);
 		}
 		
 		@Override
