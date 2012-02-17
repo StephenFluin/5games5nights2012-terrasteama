@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -14,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class TerrasteamaActivity extends Activity {
 	private BuildingAdapter adapter;
@@ -30,6 +32,27 @@ public class TerrasteamaActivity extends Activity {
         
         Button build = new Button(this);
         build.setText("New Building");
+        build.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final CharSequence[] items = {"Well", "Control Center"};
+				AlertDialog.Builder builder = new AlertDialog.Builder(TerrasteamaActivity.this);
+				builder.setTitle("Pick a building");
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+				    public void onClick(DialogInterface dialog, int item) {
+				        if (item == 0) {
+				        	adapter.addItem(new Well());
+				        } else if (item == 1) {
+				        	adapter.addItem(new ControlCenter());
+				        } else {
+					        Toast.makeText(getApplicationContext(), "Unknown Building Type: " + items[item], Toast.LENGTH_SHORT).show();
+				        }
+				    }
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+			}
+        });
         l.addView(build);
         
         adapter = new BuildingAdapter(Game.game.buildings);
@@ -54,6 +77,11 @@ public class TerrasteamaActivity extends Activity {
 		@Override
 		public Building getItem(int position) {
 			return buildings.get(position);
+		}
+		
+		public void addItem(Building b) {
+			buildings.add(b);
+			notifyDataSetChanged();
 		}
 		
 		@Override
