@@ -3,10 +3,6 @@ package com.mortalpowers.android.terrasteama;
 public class Well extends Building {
 	public Well() {
 		super(10, "Well");
-	}
-
-	@Override
-	public int getSteamProduction() {
-		return 6;
+		steamProduction = 6;
 	}
 }

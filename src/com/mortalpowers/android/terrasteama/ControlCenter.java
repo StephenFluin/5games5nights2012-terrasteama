@@ -4,10 +4,9 @@ public class ControlCenter extends Building {
 
 	public ControlCenter() {
 		super(5, "Control Center");
+		builderQuantity = 1;
 	}
 
-	public int getBuilderQuantity() {
-		return 1;
-	}
+
 
 }
