@@ -25,6 +25,8 @@ public class TerrasteamaActivity extends Activity {
 	protected Handler h;
 	Runnable runner = null;
 	protected TextView totalSteam;
+	protected TextView production;
+	protected TextView consumption;
 	static Context toastContext;
 	
     /** Called when the activity is first created. */
@@ -64,8 +66,13 @@ public class TerrasteamaActivity extends Activity {
         l.addView(build);
         
         totalSteam = new TextView(this);
-        totalSteam.setText("Total Steam: " + Game.game.globalSteam);
         l.addView(totalSteam);
+        
+        production = new TextView(this);
+        l.addView(production);
+        
+        consumption = new TextView(this);
+        l.addView(consumption);
         
         adapter = new BuildingAdapter(Game.game.buildings);
         lv.setAdapter(adapter);
@@ -84,6 +91,8 @@ public class TerrasteamaActivity extends Activity {
 				h.postDelayed(this, 1000);
 				Game.game.tick();
 				totalSteam.setText("Total Steam: " + Game.game.globalSteam);
+				production.setText("Production: " + Game.game.getProduction());
+				consumption.setText("Consumption: " + Game.game.getConsumption());
 				adapter.notifyDataSetChanged();
 			}
         };

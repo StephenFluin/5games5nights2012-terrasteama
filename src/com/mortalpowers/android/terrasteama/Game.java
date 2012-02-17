@@ -31,7 +31,29 @@ public class Game {
 			maxBuilds += b.getBuilderQuantity();
 		}
 		return maxBuilds;
-
+	}
+	
+	public int getProduction() {
+		int production = 0;
+		for (Building b : buildings) {
+			production += b.getSteamProduction();
+		}
+		return production;
+	}
+	
+	public int getConsumption() {
+		int consumption = 0;
+		boolean doingConstruction = false;
+		for (Building b : buildings) {
+			consumption += b.getSteamConsumption();
+			if (!b.isComplete()) {
+				doingConstruction = true;
+			}
+		}
+		if (doingConstruction) {
+			consumption += getAvailableBuilders();
+		}
+		return consumption;
 	}
 
 	public void tick() {
