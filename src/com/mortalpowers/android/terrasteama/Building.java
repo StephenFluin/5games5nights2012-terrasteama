@@ -19,15 +19,15 @@ public abstract class Building {
 	}
 
 	public int getSteamProduction() {
-		return (level == 0 ? 0 : steamProduction);
+		return (level == 0 || !isComplete() ? 0 : steamProduction);
 	}
 
 	public int getSteamConsumption() {
-		return (level == 0 ? 0 : steamConsumption);
+		return (level == 0 || !isComplete() ? 0 : steamConsumption);
 	}
 
 	public int getBuilderQuantity() {
-		return (level == 0 ? 0 : builderQuantity);
+		return (level == 0 || !isComplete()  ? 0 : builderQuantity);
 	}
 
 	public int getRequiredSteam() {
@@ -36,17 +36,13 @@ public abstract class Building {
 
 	public boolean isComplete() {
 		boolean result = (currentSteam >= requiredSteam);
-		if(!result) {
-			Log.d("terrasteama","Upgrade not complete for " + getName() + " ,is now " + currentSteam + " / " + requiredSteam);
-		}
+
 		return result;
 	}
 	
 	public void setCompletion(int steam) {
 		currentSteam = steam;
-		Log.d("terrasteama","Steam for " + getName() + " is now " + currentSteam + " / " + requiredSteam);
 		if (currentSteam >= requiredSteam) {
-			Log.d("terrasteama", " Levelling up from setCompletion.");
 			levelup();
 			
 		}
@@ -64,7 +60,7 @@ public abstract class Building {
 		if (level == 0) {
 			requiredSteam = 20;
 		} else {
-			requiredSteam = (int) (200 * Math.pow(level, 10));
+			requiredSteam = (int) (200 * Math.pow(level, 2));
 		}
 		Log.d("terrasteama","Required steam is now " + requiredSteam);
 		Log.d("terrasteama", "Isocmplete? " + isComplete() + " current is " + currentSteam);

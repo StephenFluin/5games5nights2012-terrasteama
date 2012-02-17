@@ -33,33 +33,32 @@ public class Game {
 		return maxBuilds;
 
 	}
-	
+
 	public void tick() {
 		int builders = getAvailableBuilders();
-		
-		
+
 		for (Building b : buildings) {
 			globalSteam += b.getSteamProduction();
 			globalSteam -= b.getSteamConsumption();
-			if(!b.isComplete()) {
-				globalSteam -= Math.min(globalSteam,builders);
-				b.advance(Math.min(globalSteam,builders));
-				
+			if (!b.isComplete()) {
+				if (builders > 0) {
+					globalSteam -= Math.min(globalSteam, builders);
+					b.advance(Math.min(globalSteam, builders));
+					builders = 0;
+				}
 			}
-			
+
 		}
-		
-		if(buildings.size() > 0 && globalSteam < 0) {
+
+		if (buildings.size() > 0 && globalSteam < 0) {
 			int deadBuilding = 0;
 			deadBuilding = (int) (Math.random() * buildings.size());
-			TerrasteamaActivity.toast(buildings.get(deadBuilding).getName() + " destroyed by lack of steam.", false);
+			TerrasteamaActivity.toast(buildings.get(deadBuilding).getName()
+					+ " destroyed by lack of steam.", false);
 			buildings.remove(deadBuilding);
 			globalSteam = 1;
 		}
-		
-		
-		
+
 	}
-	
 
 }
