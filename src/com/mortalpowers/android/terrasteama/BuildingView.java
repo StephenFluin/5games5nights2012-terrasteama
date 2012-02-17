@@ -44,7 +44,6 @@ public class BuildingView extends TableLayout {
 	}
 	
 	public void update() {
-		System.out.println("calling update");
 		name.setText(building.getName());
 		dataItems.removeAllViews();
 		TextView t;
@@ -67,6 +66,18 @@ public class BuildingView extends TableLayout {
 			dataItems.addView(t);
 			t.setText("Builders: "
 					+ building.getBuilderQuantity());
+		}
+		if (!building.isComplete()) {
+			t = new TextView(context);
+			t.setGravity(Gravity.RIGHT);
+			dataItems.addView(t);
+			String msg;
+			if(building.getCurrentSteam() < 20) {
+				msg = "Building";
+			} else {
+				msg = "Upgrading";
+			}
+			t.setText(msg + ": " + building.getCurrentSteam() + " / " + building.getRequiredSteam());
 		}
 	}
 }

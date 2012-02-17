@@ -2,12 +2,13 @@ package com.mortalpowers.android.terrasteama;
 
 import java.util.Vector;
 
+import android.util.Log;
 import android.widget.Toast;
 
 public class Game {
 	public static Game game = new Game();
 	public Vector<Building> buildings = new Vector<Building>();
-	public int globalSteam = 0;
+	public int globalSteam = 50;
 
 	public Game() {
 		game = this;
@@ -21,40 +22,42 @@ public class Game {
 
 	public void addFinishedBuilding(Building b) {
 		buildings.add(b);
-		b.setCompletion(b.getRequiredSteam());
+		b.magicFinish();
 	}
 
-	public int getOngoingBuilds() {
-		int ongoingBuilds = 0;
-		for (Building b : buildings) {
-			if (b.isComplete()) {
-				ongoingBuilds++;
-			}
-		}
-		return ongoingBuilds;
-	}
-
-	public int getAvailableBuilds() {
+	public int getAvailableBuilders() {
 		int maxBuilds = 0;
 		for (Building b : buildings) {
 			maxBuilds += b.getBuilderQuantity();
 		}
-		return maxBuilds - getOngoingBuilds();
+		return maxBuilds;
 
 	}
 	
 	public void tick() {
+		int builders = getAvailableBuilders();
+		
+		
 		for (Building b : buildings) {
 			globalSteam += b.getSteamProduction();
 			globalSteam -= b.getSteamConsumption();
+			if(!b.isComplete()) {
+				globalSteam -= Math.min(globalSteam,builders);
+				b.advance(Math.min(globalSteam,builders));
+				
+			}
 			
 		}
-		int deadBuilding = 0;
-		if(globalSteam < 0) {
+		
+		if(buildings.size() > 0 && globalSteam < 0) {
+			int deadBuilding = 0;
 			deadBuilding = (int) (Math.random() * buildings.size());
+			TerrasteamaActivity.toast(buildings.get(deadBuilding).getName() + " destroyed by lack of steam.", false);
+			buildings.remove(deadBuilding);
+			globalSteam = 1;
 		}
-		TerrasteamaActivity.toast(buildings.get(deadBuilding).getName() + " destroyed by lack of steam.", true);
-		buildings.remove(deadBuilding);
+		
+		
 		
 	}
 	

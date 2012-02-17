@@ -1,58 +1,88 @@
 package com.mortalpowers.android.terrasteama;
 
+import android.util.Log;
+
 public abstract class Building {
-	
+
 	private int requiredSteam = 0;
 	private int currentSteam = 0;
-	private int steamConsumption = 0;
+	protected int steamConsumption = 0;
 	protected int builderQuantity = 0;
 	protected int steamProduction = 0;
-	protected int level = 1;
+	protected int level = 0;
 	private String name = "Unnamed";
 
 	public Building(int consumption, String name) {
 		steamConsumption = consumption;
 		this.name = name;
+		upgrade();
 	}
-	
+
 	public int getSteamProduction() {
-		return steamProduction;
+		return (level == 0 ? 0 : steamProduction);
 	}
 
 	public int getSteamConsumption() {
-		return steamConsumption;
+		return (level == 0 ? 0 : steamConsumption);
 	}
 
 	public int getBuilderQuantity() {
-		return builderQuantity;
+		return (level == 0 ? 0 : builderQuantity);
 	}
-	public int getRequiredSteam () {
+
+	public int getRequiredSteam() {
 		return requiredSteam;
 	}
+
 	public boolean isComplete() {
-		return (currentSteam >= requiredSteam);
+		boolean result = (currentSteam >= requiredSteam);
+		if(!result) {
+			Log.d("terrasteama","Upgrade not complete for " + getName() + " ,is now " + currentSteam + " / " + requiredSteam);
+		}
+		return result;
 	}
 	
 	public void setCompletion(int steam) {
 		currentSteam = steam;
-		if(currentSteam > requiredSteam) {
-			currentSteam = requiredSteam;
+		Log.d("terrasteama","Steam for " + getName() + " is now " + currentSteam + " / " + requiredSteam);
+		if (currentSteam >= requiredSteam) {
+			Log.d("terrasteama", " Levelling up from setCompletion.");
+			levelup();
+			
 		}
 	}
+	
 	public void advance(int steam) {
 		setCompletion(currentSteam + steam);
 	}
-	
+
 	public String getName() {
 		return name;
 	}
+
 	public void upgrade() {
-		this.level +=1;
-		steamConsumption = (int) Math.round(steamConsumption * 1.5);
-		builderQuantity = Math.round(builderQuantity * 2);
-		steamProduction = Math.round(steamProduction * 2);
-		requiredSteam = (int) Math.round(requiredSteam * 1.5);
-		
+		if (level == 0) {
+			requiredSteam = 20;
+		} else {
+			requiredSteam = (int) (200 * Math.pow(level, 10));
+		}
+		Log.d("terrasteama","Required steam is now " + requiredSteam);
+		Log.d("terrasteama", "Isocmplete? " + isComplete() + " current is " + currentSteam);
+
+	}
+
+	/**
+	 * Advance the building to the next level of consumption and production.
+	 */
+	public abstract void levelup() ;
+
+	public int getCurrentSteam() {
+		return currentSteam;
+	}
+
+	public void magicFinish() {
+		currentSteam = requiredSteam;
+		levelup();
 		
 	}
 }
