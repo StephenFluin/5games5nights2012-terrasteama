@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 
 public class TerrasteamaActivity extends Activity {
 	private BuildingAdapter adapter;
-	
+	protected Handler h;
 	
     /** Called when the activity is first created. */
     @Override
@@ -60,6 +61,14 @@ public class TerrasteamaActivity extends Activity {
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new UpgradeBuilding());
         l.addView(lv);
+        
+        h = new Handler();
+        h.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				h.postDelayed(this, 1000);
+			}
+        }, 1000);
     }
     
     private class BuildingAdapter extends BaseAdapter {
