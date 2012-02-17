@@ -44,6 +44,7 @@ public class BuildingView extends TableLayout {
 	}
 	
 	public void update() {
+		System.out.println("calling update");
 		name.setText(building.getName());
 		dataItems.removeAllViews();
 		TextView t;

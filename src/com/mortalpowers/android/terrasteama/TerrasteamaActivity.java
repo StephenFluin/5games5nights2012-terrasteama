@@ -99,7 +99,6 @@ public class TerrasteamaActivity extends Activity {
 				return new BuildingView(TerrasteamaActivity.this, buildings.get(position));
 			}
 		}
-    	
     }
     
 	private class UpgradeBuilding implements OnItemClickListener {
@@ -116,6 +115,7 @@ public class TerrasteamaActivity extends Activity {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									getBuilding().upgrade();
+						        	adapter.notifyDataSetChanged();
 									dialog.cancel();
 								}
 							})
