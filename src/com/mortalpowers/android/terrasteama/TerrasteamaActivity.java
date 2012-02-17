@@ -1,6 +1,7 @@
 package com.mortalpowers.android.terrasteama;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -16,8 +17,10 @@ public class TerrasteamaActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ArrayList<String> items = new ArrayList<String>();
-        items.add("blah");
-        items.add("glorp");
+        Vector<Building> building = Game.game.buildings;
+        for (Building b : building) {
+        	items.add(b.getName());
+        }
         adapter = new ArrayAdapter<String>(this, R.layout.list_item, items);
         setListAdapter(adapter);
         ListView lv = getListView();
