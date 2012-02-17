@@ -74,11 +74,32 @@ public class TerrasteamaActivity extends Activity {
         consumption = new TextView(this);
         l.addView(consumption);
         
-        adapter = new BuildingAdapter(Game.game.buildings);
+        adapter = new BuildingAdapter();
         lv.setAdapter(adapter);
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new UpgradeBuilding());
         l.addView(lv);
+        
+        Button quit = new Button(this);
+        quit.setText("Kill");
+        quit.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				android.os.Process.killProcess(android.os.Process.myPid());
+			}
+        });
+        l.addView(quit);
+        
+        Button restart = new Button(this);
+        restart.setText("Restart");
+        restart.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Game.game = new Game();
+				updateDisplay();
+			}
+        });
+        l.addView(restart);
     }
     
     @Override
@@ -90,13 +111,17 @@ public class TerrasteamaActivity extends Activity {
 			public void run() {
 				h.postDelayed(this, 1000);
 				Game.game.tick();
-				totalSteam.setText("Total Steam: " + Game.game.globalSteam);
-				production.setText("Production: " + Game.game.getProduction());
-				consumption.setText("Consumption: " + Game.game.getConsumption());
-				adapter.notifyDataSetChanged();
+				updateDisplay();
 			}
         };
         h.postDelayed(runner, 1000);
+    }
+    
+    public void updateDisplay() {
+		totalSteam.setText("Total Steam: " + Game.game.globalSteam);
+		production.setText("Production: " + Game.game.getProduction());
+		consumption.setText("Consumption: " + Game.game.getConsumption());
+		adapter.notifyDataSetChanged();
     }
     
     @Override
@@ -106,24 +131,18 @@ public class TerrasteamaActivity extends Activity {
     }
     
     private class BuildingAdapter extends BaseAdapter {
-    	private Vector<Building> buildings;
-    	
-    	public BuildingAdapter(Vector<Building> b) {
-    		buildings = b;
-    	}
-
 		@Override
 		public int getCount() {
-			return buildings.size();
+			return Game.game.buildings.size();
 		}
 
 		@Override
 		public Building getItem(int position) {
-			return buildings.get(position);
+			return Game.game.buildings.get(position);
 		}
 		
 		public void addItem(Building b) {
-			buildings.add(b);
+			Game.game.buildings.add(b);
 			notifyDataSetChanged();
 		}
 		
@@ -136,10 +155,10 @@ public class TerrasteamaActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView != null && convertView instanceof BuildingView) {
-				((BuildingView)convertView).setBuilding(buildings.get(position));
+				((BuildingView)convertView).setBuilding(Game.game.buildings.get(position));
 				return convertView;
 			} else {
-				return new BuildingView(TerrasteamaActivity.this, buildings.get(position));
+				return new BuildingView(TerrasteamaActivity.this, Game.game.buildings.get(position));
 			}
 		}
     }
