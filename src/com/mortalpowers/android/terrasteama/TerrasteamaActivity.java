@@ -17,11 +17,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class TerrasteamaActivity extends Activity {
 	private BuildingAdapter adapter;
 	protected Handler h;
+	protected TextView totalSteam;
 	static Context toastContext;
 	
     /** Called when the activity is first created. */
@@ -60,6 +62,10 @@ public class TerrasteamaActivity extends Activity {
         });
         l.addView(build);
         
+        totalSteam = new TextView(this);
+        totalSteam.setText("Total Steam: " + Game.game.globalSteam);
+        l.addView(totalSteam);
+        
         adapter = new BuildingAdapter(Game.game.buildings);
         lv.setAdapter(adapter);
         lv.setTextFilterEnabled(true);
@@ -72,6 +78,7 @@ public class TerrasteamaActivity extends Activity {
 			public void run() {
 				h.postDelayed(this, 1000);
 				Game.game.tick();
+				totalSteam.setText("Total Steam: " + Game.game.globalSteam);
 				adapter.notifyDataSetChanged();
 			}
         }, 1000);
