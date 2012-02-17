@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -19,12 +20,15 @@ import android.widget.Toast;
 
 public class TerrasteamaActivity extends Activity {
 	private BuildingAdapter adapter;
+	static Context toastContext;
 	
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        toastContext = getApplicationContext();
         LinearLayout l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
         setContentView(l);
@@ -144,5 +148,11 @@ public class TerrasteamaActivity extends Activity {
 
 		@Override
 		public abstract void onClick(DialogInterface dialog, int which);
+	}
+	
+	public static void toast(String message,boolean longToast) {
+		
+		Toast.makeText(toastContext, message,
+				   longToast ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show(); 
 	}
 }
