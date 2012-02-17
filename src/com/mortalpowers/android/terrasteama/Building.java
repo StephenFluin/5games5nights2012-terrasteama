@@ -5,9 +5,11 @@ public abstract class Building {
 	private int requiredSteam = 0;
 	private int currentSteam = 0;
 	private int steamConsumption = 0;
+	private String name = "Unnamed";
 
-	public Building(int consumption) {
+	public Building(int consumption, String name) {
 		steamConsumption = consumption;
+		this.name = name;
 	}
 	
 	public int getSteamProduction() {
@@ -38,5 +40,7 @@ public abstract class Building {
 		setCompletion(currentSteam + steam);
 	}
 	
-	
+	public String getName() {
+		return name;
+	}
 }
