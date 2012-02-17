@@ -40,28 +40,32 @@ public class BuildingView extends TableLayout {
 
 	public void setBuilding(Building b) {
 		building = b;
-		name.setText(b.getName());
+		update();
+	}
+	
+	public void update() {
+		name.setText(building.getName());
 		dataItems.removeAllViews();
 		TextView t;
-		if (b.getSteamProduction() > 0) {
+		if (building.getSteamProduction() > 0) {
 			 t = new TextView(context);
 			 t.setGravity(Gravity.RIGHT);
 			dataItems.addView(t);
-			t.setText("Production: " + b.getSteamProduction());
+			t.setText("Production: " + building.getSteamProduction());
 		}
-		if (b.getSteamConsumption() > 0) {
+		if (building.getSteamConsumption() > 0) {
 			t = new TextView(context);
 			t.setGravity(Gravity.RIGHT);
 			dataItems.addView(t);
 			t.setText("Consumption: "
-					+ b.getSteamConsumption());
+					+ building.getSteamConsumption());
 		}
-		if (b.getBuilderQuantity() > 0) {
+		if (building.getBuilderQuantity() > 0) {
 			t = new TextView(context);
 			t.setGravity(Gravity.RIGHT);
 			dataItems.addView(t);
 			t.setText("Builders: "
-					+ b.getBuilderQuantity());
+					+ building.getBuilderQuantity());
 		}
 	}
 }
