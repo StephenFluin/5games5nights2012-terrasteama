@@ -23,6 +23,7 @@ import android.widget.Toast;
 public class TerrasteamaActivity extends Activity {
 	private BuildingAdapter adapter;
 	protected Handler h;
+	Runnable runner = null;
 	protected TextView totalSteam;
 	static Context toastContext;
 	
@@ -71,9 +72,13 @@ public class TerrasteamaActivity extends Activity {
         lv.setTextFilterEnabled(true);
         lv.setOnItemClickListener(new UpgradeBuilding());
         l.addView(lv);
-        
+    }
+    
+    @Override
+    public void onResume() {
+    	super.onResume();
         h = new Handler();
-        h.postDelayed(new Runnable() {
+        runner = new Runnable() {
 			@Override
 			public void run() {
 				h.postDelayed(this, 1000);
@@ -81,7 +86,14 @@ public class TerrasteamaActivity extends Activity {
 				totalSteam.setText("Total Steam: " + Game.game.globalSteam);
 				adapter.notifyDataSetChanged();
 			}
-        }, 1000);
+        };
+        h.postDelayed(runner, 1000);
+    }
+    
+    @Override
+    public void onPause() {
+    	super.onPause();
+    	h.removeCallbacks(runner);
     }
     
     private class BuildingAdapter extends BaseAdapter {
